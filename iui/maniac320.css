@@ -1,0 +1,33 @@
+/** iOS 4 **/
+body {
+	background-color:yellow;
+}
+body > .toolbar {
+	position:relative;
+	width:320px;
+}
+body[orient="landscape"] > .toolbar {
+	width:480px;
+}
+
+.dialog fieldset {
+	width:320px;
+	position:relative;
+}
+body[orient="landscape"] .dialog fieldset {
+	width:480px;
+}
+.thread {
+	max-width: 320px;
+}
+body[orient="landscape"] .thread {
+	max-width:480px;
+}
+/*
+.thread li {
+	max-width: 300px;
+}
+.thread li > a {
+	max-width: 300px;
+}
+*/

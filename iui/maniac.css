@@ -1,0 +1,198 @@
+/** nothing here **/
+
+body > ul > li {
+    font-size: 15px;
+}
+#boardlist > li {
+	line-height:25px;
+}
+a.button:visited {
+    color: #ffffff;
+}
+a:visited, .thread li > a:visited {
+    color: #63728F;
+}
+a[selected] > .info, a:active > .info {
+	color: #d0d0d0;
+}
+/*a:visited:after {
+content:"\00A0\2713";
+}*/
+#pageTitle > a {
+    text-decoration:none;
+    color:#ffffff;
+    background: transparent url(reload.png) no-repeat right center;
+    padding-right:23px;
+    /*line-height:*/
+}
+#pageTitle > a:visited {
+    color:#ffffff;
+}
+#pageTitle > a[selected], #pageTitle > a:active {
+    background-color: transparent !important;
+    background-image: url(reload.png) !important;
+    background-repeat: no-repeat;
+    background-position: right center;
+    color: #FFFFFF !important;
+}
+#pageTitle > a[selected="progress"] {
+    background-image: url(title-loader.gif) !important;
+}
+
+.SettingsInfo {
+    margin:5px 0px;
+    padding:4px;
+    font-size:13px;
+    background-color:#ffffff;
+    text-align:left;
+    border:1px solid black;
+    -webkit-border-radius: 5px;
+}
+textarea {
+    width:100%;
+    height:150px;
+    margin:3px 0;
+    padding:5px 3px;
+}
+/*body[orient="landscape"] textarea {
+    height:80px;
+}*/
+.board .highlight {
+    background-color: #f0f0ff;
+    text-shadow: rgba(0, 0, 0, 0.2) -1px -1px 0;
+}
+.board .closed {
+    background: #efefef url(locked.png) no-repeat 8px 50%;
+    padding-left: 27px;
+/*    background-color:#efefef;*/
+    font-style:italic;
+    font-size:85%;
+}
+
+.board .closed .info {
+    font-size:10px;
+}
+
+.board .title {
+}
+.board .info {
+    font-size: 12px; 
+    color:#606060;
+}
+span.highlight {
+    color:#B71100;
+}
+
+.thread {
+    font-size:15px;
+	width:100%;
+	overflow:hidden;
+}
+.thread ul {
+    padding-left:5px;
+    border-left: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+/*    margin: 5px 0;*/
+	margin:5px 0 5px 6px;
+}
+.thread ul:first-child {
+    padding-left:8px;
+    border:0;
+}
+.thread li {
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    padding: 2px 0;
+    padding-left:20px;
+    background:url(closed.png) no-repeat scroll left 5px;
+    /*line-height:25px;*/
+    /*border:1px solid grey;*/
+}
+.thread li[opened="true"] {
+    background:url(open.png) no-repeat scroll left 5px;
+}
+.thread div.author {
+    font-size: 12px;
+    color: #606060;
+}
+.thread div.author .currentuser {
+    color:#0000ff;
+}
+.thread li > a {
+    font-weight:bold;
+    color:#000000;
+    text-decoration:none;
+    display:block;
+}
+.thread .message {
+    background-color:white;
+    padding:5px;
+    border-top: 1px solid #cccccc;
+    border-bottom: 2px solid #cccccc;
+    border-left:1px solid #cccccc;
+    min-height:100px;
+    overflow:hidden;
+}
+.thread .message[loading='true'] {
+    background:white url(ajax-loader.gif) no-repeat 50% 50%;
+}
+.message {
+    font-size:13px;
+}
+.message a {
+    color: #343434;
+}
+.message .author {
+    border-bottom: 1px solid #cccccc;
+    background:#f0f0ff url(user.png) no-repeat 5px 50%;
+    display:block;
+    line-height:25px;
+    padding-left:25px;
+    text-decoration:none;
+    font-weight:bold;
+    margin:-5px -4px 0 -5px;
+    padding-top:5px;
+}
+.reply {
+    background-color:#f0f0ff;
+    border-bottom:1px solid #CCCCCC;
+    margin:0 -4px 0px -5px;
+    padding:2px 5px;    
+}
+.reply a {
+    background:transparent url(reply.png) no-repeat left 50%;
+    display:inline-table;
+    line-height:25px;
+    padding-left:20px;
+    text-decoration:none;
+    font-weight:bold;
+}
+.message .title {
+    background-color:#f0f0ff;
+    border-bottom:2px solid #CCCCCC;
+    margin:0 -4px 10px -5px;
+    padding:2px 5px;
+    font-weight: bold;
+    line-height:25px;
+    font-size:15px;
+}
+.postingresponse {
+	color:#303030;
+	font-weight:bold;
+	padding:3px 8px !important;
+	font-size:10px;
+}
+
+.rowodd {
+	background-color:#f9f9ff;
+}
+.boardtitle {
+	background:#1574D6 url(mausrufezeichen-touch-icon.png) no-repeat 50% 10px;
+	height:60px;
+	color:#ffffff;
+	font-weight:bold;
+}
+/*.button {
+	border:1px solid red !important;
+}*/

@@ -1,0 +1,102 @@
+﻿<html>
+    <head>
+        <title>-= iPhone board: index =-</title>
+        <meta id="viewport" name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+        <script type="application/x-javascript" src="iui/iui.js"></script>
+        <style type="text/css" media="screen">@import "iui/iui.css";</style>
+        <style type="text/css" media="screen">@import "iui/maniac.css";</style>
+        
+		<!--link media="only screen and (max-device-width: 320px)" href="iui/maniac320.css" type= "text/css" rel="stylesheet" /-->
+        
+		
+   </head>
+   
+   <body>
+        <div class="toolbar">
+            <h1 id="pageTitle"> </h1>
+            <a id="backButton" class="button" href="#">back</a>
+            <a id="settingsButton" class="button" href="#settings">Settings</a>
+            <iframe id="historyhack" width="1" height="1" style="position:absolute;left:0;bottom:0;border:0"></iframe>
+        </div>
+
+        <ul id="boardlist" title="M! Forum" selected="true">
+<!--        	<li class="boardtitle"></li>-->
+<!-- <li style="line-height:50px"><b style="color:red">Achtung:</b> wäre sehr dankbar, Feedback zur <a href="http://www.widmann.org/maniac2012/" target="_new" style="display:inline;background:none;color:blue;padding:0;margin:0">2012 Version</a> zu bekommen! </li>        
+ -->            <li><a href="board.php?id=1">Smalltalk</a></li>
+            <li><a href="board.php?id=2">For Sale</a></li>
+            <li><a href="board.php?id=4">Retro'n'Tech</a></li>
+            <li><a href="board.php?id=6">OT</a></li>
+            <li><a href="board.php?id=26">Filme & Serien</a></li>
+            <li><a href="board.php?id=8">Online-Gaming</a></li>
+            <!--<li><a href="board.php?id=30">EM 2016</a></li>
+            <li><a href="board.php?id=31">E3 2016</a></li>-->
+            
+            <!-- <li><a href="board.php?id=29">E3 2015</a></li> -->
+
+<!--            <li><a href="board.php?id=21">PCX Asyl</a></li>-->
+<!--             <li><a href="board.php?id=23">EM 2012</a></li>
+            <li><a href="board.php?id=24">E3 2012</a></li>
+ -->        </ul>
+
+        <form class="dialog" id="settings">
+            <fieldset>
+                <h1>Einstellungen</h1>
+                <a class="button leftButton" type="cancel" href="#">Abbrechen</a>
+                <a class="button blueButton" type="storeSettings" href="#">Speichern</a>
+                
+<!--                <div class="SettingsInfo">Die Daten werden <b>nicht</b> an den Server geschickt, sondern nur lokal als Cookie gespeichert, damit Posten m&ouml;glich ist.</div>-->
+                <label>nickname:</label>
+                <input type="text" name="username" id="username"/>
+                <label>passwort:</label>
+                <input type="password" name="password" id="password"/>
+                <div class="SettingsInfo">
+                    <input type="checkbox" name="paranoia" id="paranoia" value="1"/>
+                    Paranoia Modus
+                </div>
+                <div class="SettingsInfo">
+                    <input type="checkbox" name="singlemsg" id="singlemsg" value="1"/>
+                    Nur ein Post Modus
+                </div>
+                <div class="SettingsInfo">
+                    Die hier eingegebenen Passwörter werden <b>nur</b> zum Posten verwendet. Sie werden nicht am Server ausgewertet oder gespeichert!
+                    <br/><br/>Die Anpassung des Forums wurde von <a href="http://www.widmann.org" target="_blank">johnjohnson</a> gemacht, das tolle Icon stammt von <a href="http://www.nitschi.at" target="_blank">Nitschi</a>.
+                </div>
+            </fieldset>
+        </form>
+
+        <form class="dialog floating" id="post" method="post" action="post.php">
+            <fieldset>
+                <h1>Antworten</h1>
+                <a class="button leftButton" id="post_cancelbutton" type="cancel" href="#">Abbrechen</a>
+                <a class="button blueButton" id="post_submitbutton" type="submit" href="#">Abschicken</a>
+                
+                <input type="hidden" value="messagesave" name="mode"/>
+                <input type="hidden" value="1" name="brdid" id="post_brdid" />
+                <input type="hidden" value="" name="msgid" id="post_msgid" />
+                
+                <label>nickname:</label>
+                <input type="text" name="nick" id="post_nick" />
+                <label>password:</label>
+                <input type="password" name="pass" id="post_pass" />
+                <label>thema:</label>
+                <input type="text" name="subject" id="post_subject" maxlength="56" />
+                <textarea wrap="soft" name="body" id="post_body"></textarea>
+            </fieldset>
+        </form>
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+//try {
+var pageTracker = _gat._getTracker("UA-3575019-3");
+//pageTracker._trackPageview();
+//} catch(err) {}
+</script>
+
+   </body>
+   
+</html>
