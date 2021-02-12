@@ -2,7 +2,68 @@
 
     require_once "settings.php";
 
+    function parseThread($thread) {
+        $is_open = stripos($thread, 'img/open.png') > 0;
+        $is_fixed = stripos($thread, 'img/fixed.gif') > 0;
+        if ($is_fixed) {
+            $is_open = true;
+        }
+        if (preg_match('/<font size="2">(.*)<\/font>/m', $thread, $matches)) {
+            $title = $matches[1];
+        }
+        if (preg_match('/von (<font size="2" color="#FFC343">)?<b>(.*)<\/b>/m', $thread, $matches)) {
+            $author = $matches[2];
+            $is_mod = !empty($matches[1]);
+        }
+
+        if (preg_match('/Antworten: (\d+)/m', $thread, $matches)) {
+            $replies = $matches[1];
+        }
+        if (preg_match('/ld\((\d+)\)/m', $thread, $matches)) {
+            $thread_id = $matches[1];
+        }
+        if (preg_match('/letzte Antwort: (\d{2}.\d{2}.\d{4} \d{2}:\d{2})/m', $thread, $matches)) {
+            $last_reply = $matches[1];
+        }
+        return [
+            'is_fixed' => $is_fixed,
+            'is_open' => $is_open,
+            'thread_id' => $thread_id,
+            'title' => $title,
+            'author' => $author,
+            'replies' => $replies,
+            'is_mod' => $is_mod,
+            'last_reply' => $last_reply,
+        ];
+    }
+
+    global $counter;
+    $counter = 0;
+    function renderThread($thread) {
+        global $thread_id, $counter;
+        $thread_line .= "<li";
+        $odd = "";
+        if ($counter % 2 == 1) $odd = " rowodd";
+        if ($thread['is_fixed'])
+            $thread_line .= " class=\"highlight{$odd}\"";
+        if (!$thread['is_open'])
+            $thread_line .= " class=\"closed{$odd}\"";
+        else
+            $thread_line .= " class=\"{$odd}\"";
+
+        $thread_line .= ">\n";
+        $thread_line .= "<a href=\"thread.php?id=$thread_id&thread={$thread['thread_id']}&closed=". ($thread['is_open'] ? '0':'1') . "\">";
+        $thread_line .= "<div class=\"title\">{$thread['title']}</div>\n";
+        $thread_line .= "<div class=\"info\">Author: {$thread['author']}, {$thread['replies']} Antworten, zuletzt: {$thread['last_reply']}</div>";
+        $thread_line .= "</a>";
+        $thread_line .= "</li>\n";
+        $counter ++;
+        return $thread_line;
+    }
+
     function showForum($id) {
+        global $thread_id;
+        $thread_id = $id;
         $request = new HTTPRequest(BOARD_URL . $id);
         $relevant_content = $request->DownloadToString();
         $relevant_content = substr($relevant_content, stripos($relevant_content, '<tr bgcolor="#7dacac">'));
@@ -12,62 +73,10 @@
         // remove the last two elements
         array_splice($threads, -2);
 
-        $threads = array_map(function($thread) {
-            $is_open = stripos($thread, 'img/open.png') > 0;
-            $is_fixed = stripos($thread, 'img/fixed.gif') > 0;
-            if ($is_fixed) {
-                $is_open = true;
-            }
-            if (preg_match('/<font size="2">(.*)<\/font>/m', $thread, $matches)) {
-                $title = $matches[1];
-            }
-            if (preg_match('/von (<font size="2" color="#FFC343">)?<b>(.*)<\/b>/m', $thread, $matches)) {
-                $author = $matches[2];
-                $is_mod = !empty($matches[1]);
-            }
-
-            if (preg_match('/Antworten: (\d+)/m', $thread, $matches)) {
-                $replies = $matches[1];
-            }
-            if (preg_match('/ld\((\d+)\)/m', $thread, $matches)) {
-                $thread_id = $matches[1];
-            }
-            if (preg_match('/letzte Antwort: (\d{2}.\d{2}.\d{4} \d{2}:\d{2})/m', $thread, $matches)) {
-                $last_reply = $matches[1];
-            }
-            return [
-                'is_fixed' => $is_fixed,
-                'is_open' => $is_open,
-                'thread_id' => $thread_id,
-                'title' => $title,
-                'author' => $author,
-                'replies' => $replies,
-                'is_mod' => $is_mod,
-                'last_reply' => $last_reply,
-             ];
-        }, $threads);
+        $threads = array_map('parseThread', $threads);
 
         $counter = 0;
-        $transformed_threads = array_map(function($thread) use (&$counter, $id){
-            $thread_line .= "<li";
-            $odd = "";
-            if ($counter % 2 == 1) $odd = " rowodd";
-            if ($thread['is_fixed'])
-                $thread_line .= " class=\"highlight{$odd}\"";
-            if (!$thread['is_open'])
-                $thread_line .= " class=\"closed{$odd}\"";
-            else
-            	$thread_line .= " class=\"{$odd}\"";
-
-            $thread_line .= ">\n";
-            $thread_line .= "<a href=\"thread.php?id=$id&thread={$thread['thread_id']}&closed=". ($thread['is_open'] ? '0':'1') . "\">";
-            $thread_line .= "<div class=\"title\">{$thread['title']}</div>\n";
-            $thread_line .= "<div class=\"info\">Author: {$thread['author']}, {$thread['replies']} Antworten, zuletzt: {$thread['last_reply']}</div>";
-            $thread_line .= "</a>";
-            $thread_line .= "</li>\n";
-            $counter ++;
-            return $thread_line;
-        }, $threads);
+        $transformed_threads = array_map('renderThread', $threads);
 
         return utf8_encode(implode("\n", $transformed_threads));
     }

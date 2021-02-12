@@ -2,6 +2,9 @@
 
 
 var_dump($_POST);
+var_dump($_SERVER);
+var_dump($_ENV);
+phpinfo();
 
 /*
 
@@ -14,11 +17,11 @@ $decoded = json_decode($json, true);
 $threads = array();
 
 foreach ($decoded["items"] as $item) {
-	
+
 	$pid = $item["pid"];
 	if ($threads[$pid] == null)
 		$threads[$pid] = array();
-		
+
 	array_push($threads[$pid], $item);
 }
 ?>
