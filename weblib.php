@@ -25,7 +25,7 @@
         if (preg_match('/letzte Antwort: (\d{2}.\d{2}.\d{4} \d{2}:\d{2})/m', $thread, $matches)) {
             $last_reply = $matches[1];
         }
-        return [
+        return array(
             'is_fixed' => $is_fixed,
             'is_open' => $is_open,
             'thread_id' => $thread_id,
@@ -34,7 +34,7 @@
             'replies' => $replies,
             'is_mod' => $is_mod,
             'last_reply' => $last_reply,
-        ];
+        );
     }
 
     global $counter;
@@ -86,48 +86,55 @@
         $relevant_content = $request->DownloadToString();
 
         // delete everything before the first UL
-        $relevant_content = substr($relevant_content, stripos($relevant_content, "<ul"));
+        $relevant_content = substr($relevant_content, stripos($relevant_content, "<ul>"));
         $relevant_content = substr($relevant_content, 0, strripos($relevant_content, "</ul>") + 5);
-        $relevant_content = preg_replace("/\<img src=\"images\/arr_off.gif\" name=\"p(\d+)\"\/\>/i", "", $relevant_content);
-        $relevant_content = str_replace("<span class=\"\">", "", $relevant_content);
-        $relevant_content = str_replace("</span>", "", $relevant_content);
 
-        $relevant_content = preg_replace("/\<font size=\"2\"\>/i", "", $relevant_content);
-        $relevant_content = preg_replace("/ - \<font size=\"1\"\>/i", "<div class=\"author\">", $relevant_content);
-        $relevant_content = preg_replace("/\<\/font\>/i", "", $relevant_content);
-        $relevant_content = str_replace("</li>", "</div>\n</li>", $relevant_content);
+        $relevant_content = preg_replace("/\<img src=\"images\/arr_off.gif\" name=\"p(\d+)\"\>/i", "", $relevant_content);
+        $relevant_content = str_replace("<font size=\"-1\">", "", $relevant_content);
+        $relevant_content = str_replace("<font color=\"#7dacac\">von", "", $relevant_content);
 
+        // replace the author
+        $relevant_content = preg_replace("/\<font color=\"#7dacac\"\>\<b\>(.*)\<\/b\>\<\/font\>/i", "<div class=\"author_info\"><span class=\"author\">$1</span>", $relevant_content);
+        // replace the author, when admin
+        $relevant_content = preg_replace("/\<font color=\"#FFC343\"\>\<b\>(.*)\<\/b\>\<\/font\>/i", "<div class=\"author_info\"><span class=\"author admin\">$1</span>", $relevant_content);
+
+        // var_dump( $relevant_content);
+        $relevant_content = preg_replace("/\<font color=\"#7dacac\" size=\"-2\"\>- (.*)\<\/font\>/i", " - <span class=\"date\">$1</span></div>", $relevant_content);
+
+
+        $relevant_content = preg_replace("/(\<\/b\>)?\<\/font\>/i", "", $relevant_content);
+        // $relevant_content = str_replace("</li>", "</div>\n</li>", $relevant_content);
+
+        $_COOKIE['man_user'] = 'Daiyama';
         if (isset($_COOKIE['man_user']) && $_COOKIE['man_user'] != '') {
             $pattern = "/\s*" . $_COOKIE['man_user'] . "\s*/i";
-            $relevant_content = preg_replace($pattern, "<span class=\"currentuser\">".$_COOKIE['man_user']."</span>", $relevant_content);
+            $relevant_content = preg_replace($pattern, "<span class=\"currentuser\">".$_COOKIE['man_user']."</span> ", $relevant_content);
         }
+        $relevant_content = preg_replace("/ href=\"pxmboard.php\?mode=message\&brdid=(\d+)\&msgid=(\d+)\" target=\"bottom\" onclick=\"ChangePic\('p(\d+)'\)\">/", " type=\"messagedetail\" href=\"message.php?id=$1&thread=$thread_id&message=$2\">", $relevant_content);
+        // $relevant_content = preg_replace("/ href=\"pxmboard.php\?mode=message\&amp;brdid=(\d+)\&amp;msgid=(\d+)\" target=\"bottom\" onclick=\"ChangePic\(\'p(\d+)\'\)\"/i", " type=\"messagedetail\" href=\"message.php?id=$board_id&thread=$thread_id&message=", $relevant_content);
 
-        $relevant_content = preg_replace("/ href=\"pxmboard.php\?mode=message\&brdid=(\d+)\&msgid=(\d+)\" target=\"bottom\" onclick=\"cp\(\'p(\d+)\'\)\" name=\"p/i", " type=\"messagedetail\" href=\"message.php?id=$board_id&thread=$thread_id&message=", $relevant_content);
-        $relevant_content = preg_replace("/ href=\"pxmboard.php\?mode=message\&amp;brdid=(\d+)\&amp;msgid=(\d+)\" target=\"bottom\" onclick=\"cp\(\'p(\d+)\'\)\" name=\"p/i", " type=\"messagedetail\" href=\"message.php?id=$board_id&thread=$thread_id&message=",  $relevant_content);
 
-        // return utf8_encode($relevant_content);
-        return ($relevant_content);
+        return utf8_encode($relevant_content);
     }
 
     function showMessage($board_id, $thread_id, $message_id) {
         $request = new HTTPRequest(MESSAGE_URL . $message_id . "&brdid=" . $board_id);
         $relevant_content = $request->DownloadToString();
 
-        $relevant_content = substr($relevant_content, stripos($relevant_content, "<td id=\"norm\"><b>") + 17);
-        $title = substr($relevant_content, 0, stripos($relevant_content, "</b>"));
 
-        $relevant_content = substr($relevant_content, stripos($relevant_content, "&usrid=") + 7);
-        $userid = substr($relevant_content, 0, stripos($relevant_content, "\""));
+        if (preg_match('/<td id="norm" colspan="2">Thema: <b>(.*)<\/b><\/td>/m', $relevant_content, $matches)) {
+            $title = $matches[1];
+        }
+        if (preg_match('/\&usrid=(\d+)/m', $relevant_content, $matches)) {
+            $userid = $matches[1];
+        }
+        if (preg_match('/\;return false;\">(.*)<\/a>/m', $relevant_content, $matches)) {
+            $username = $matches[1];
+        }
 
-        $relevant_content = substr($relevant_content, stripos($relevant_content, "hideLayer()") + 13);
-        $username = substr($relevant_content, 0, stripos($relevant_content, "</a>"));
-
-        $relevant_content = substr($relevant_content, stripos($relevant_content, "<font face=\"Courier New\">") + 25);
+        $relevant_content = substr($relevant_content, stripos($relevant_content, "<font color=\"#000000\" face=\"Courier\">") + 37);
         $relevant_content = substr($relevant_content, 0, stripos($relevant_content, "</td>"));
-
         $relevant_content = substr($relevant_content, 0, strripos($relevant_content, "</font>"));
-
-        //$relevant_content = preg_replace("#\[<a\b[^>]*>(.*?[gif|png|jpg])</a>\]#i", '<a href="\1" target="_new"><img src="\1" style="max-width:300px" border="0"/></a>', $relevant_content);
 
         $matches = array();
         preg_match_all( '/\[<a [^>]*>(.*?)<\/a>\]/im', $relevant_content, $matches );
@@ -149,8 +156,8 @@
         }
         $relevant_content = "<div class=\"author\">$username</div>" . $relevant_content;
 
-        // return utf8_encode($relevant_content);
-        return ($relevant_content);
+        return utf8_encode($relevant_content);
+        // return ($relevant_content);
     }
 
 if(!function_exists("stripos")){

@@ -1,5 +1,9 @@
 /** nothing here **/
 
+body {
+    background-color: #315160;
+    color: #ffffff;
+}
 body > ul > li {
     font-size: 15px;
 }
@@ -10,10 +14,10 @@ a.button:visited {
     color: #ffffff;
 }
 a:visited, .thread li > a:visited {
-    color: #63728F;
+    color: rgb(134, 153, 162);
 }
 a[selected] > .info, a:active > .info {
-	color: #d0d0d0;
+    color: #7DADAD;
 }
 /*a:visited:after {
 content:"\00A0\2713";
@@ -44,6 +48,7 @@ content:"\00A0\2713";
     padding:4px;
     font-size:13px;
     background-color:#ffffff;
+    color: #000000;
     text-align:left;
     border:1px solid black;
     -webkit-border-radius: 5px;
@@ -76,8 +81,9 @@ textarea {
 .board .title {
 }
 .board .info {
-    font-size: 12px; 
-    color:#606060;
+    font-size: 12px;
+    /* color:#606060; */
+    color: #7DADAD;
 }
 span.highlight {
     color:#B71100;
@@ -112,40 +118,52 @@ span.highlight {
 .thread li[opened="true"] {
     background:url(open.png) no-repeat scroll left 5px;
 }
-.thread div.author {
+
+.thread div.author_info {
+    color: #7DADAD;
+}
+.thread span.author {
     font-size: 12px;
-    color: #606060;
+    font-weight: bold;
 }
-.thread div.author .currentuser {
-    color:#0000ff;
+.thread span.author.admin {
+    color: #FFC343;
 }
+.thread span.author .currentuser {
+    color: #FB87B5;
+}
+.thread span.date {
+    font-size: 12px;
+}
+
 .thread li > a {
     font-weight:bold;
-    color:#000000;
+    color:#ffffff;
     text-decoration:none;
     display:block;
 }
 .thread .message {
-    background-color:white;
+    background-color:#7dacac;
     padding:5px;
-    border-top: 1px solid #cccccc;
-    border-bottom: 2px solid #cccccc;
-    border-left:1px solid #cccccc;
+    border-top: 1px solid #315160;
+    border-bottom: 2px solid #315160;
+    border-left:1px solid #315160;
     min-height:100px;
     overflow:hidden;
 }
 .thread .message[loading='true'] {
-    background:white url(ajax-loader.gif) no-repeat 50% 50%;
 }
 .message {
+    font-family: 'Courier New', Courier, monospace;
     font-size:13px;
+    color: #000000;
 }
 .message a {
-    color: #343434;
+    color: #ffffff;
 }
 .message .author {
-    border-bottom: 1px solid #cccccc;
-    background:#f0f0ff url(user.png) no-repeat 5px 50%;
+    border-bottom: 1px solid #315160;
+    background:#7dacac url(user.png) no-repeat 5px 50%;
     display:block;
     line-height:25px;
     padding-left:25px;
@@ -155,10 +173,10 @@ span.highlight {
     padding-top:5px;
 }
 .reply {
-    background-color:#f0f0ff;
-    border-bottom:1px solid #CCCCCC;
+    background-color:#7dacac;
+    border-bottom:1px solid #315160;
     margin:0 -4px 0px -5px;
-    padding:2px 5px;    
+    padding:2px 5px;
 }
 .reply a {
     background:transparent url(reply.png) no-repeat left 50%;
@@ -169,8 +187,8 @@ span.highlight {
     font-weight:bold;
 }
 .message .title {
-    background-color:#f0f0ff;
-    border-bottom:2px solid #CCCCCC;
+    background-color:#4b768d;
+    border-bottom:2px solid #315160;
     margin:0 -4px 10px -5px;
     padding:2px 5px;
     font-weight: bold;
@@ -185,7 +203,8 @@ span.highlight {
 }
 
 .rowodd {
-	background-color:#f9f9ff;
+	/* background-color:#f9f9ff; */
+    background-color: #365665;
 }
 .boardtitle {
 	background:#1574D6 url(mausrufezeichen-touch-icon.png) no-repeat 50% 10px;

@@ -53,7 +53,7 @@ window.iui =
                 $('backButton').setAttribute("href", backHref);
             }
 
-            
+
         }
     },
 
@@ -79,7 +79,7 @@ window.iui =
             if (cb)
                 cb(false);
         };
-        
+
         req.onreadystatechange = function()
         {
             if (req.readyState == 4)
@@ -97,7 +97,7 @@ window.iui =
                     var frag = document.createElement("div");
                     frag.innerHTML = req.responseText;
                     iui.insertPages(frag.childNodes);
-                    
+
                 }
                 if (cb)
                     setTimeout(cb, 1000, true);
@@ -120,7 +120,7 @@ window.iui =
             req.send(null);
         }
     },
-    
+
     insertPages: function(nodes)
     {
         var targetPage;
@@ -140,13 +140,13 @@ window.iui =
 
                 if (child.getAttribute("selected") == "true" || !targetPage)
                     targetPage = child;
-                
+
                 --i;
             }
         }
 
         if (targetPage)
-            iui.showPage(targetPage);    
+            iui.showPage(targetPage);
     },
 
     getSelectedPage: function()
@@ -155,8 +155,8 @@ window.iui =
         {
             if (child.nodeType == 1 && child.getAttribute("selected") == "true")
                 return child;
-        }    
-    }    
+        }
+    }
 };
 
 // *************************************************************************************************
@@ -170,34 +170,34 @@ addEventListener("load", function(event)
     setTimeout(preloadImages, 0);
     setTimeout(checkOrientAndLocation, 0);
     checkTimer = setInterval(checkOrientAndLocation, 300);
-    
+
     // getting user data from cookie and setting it in the fields
     var username = getCookie("man_user");
     var password = getCookie("man_pass");
     var paranoia = getCookie("man_paranoia");
     var singlemsg = getCookie("man_singlemsg");
-    
+
     $('username').value = username;
     $('password').value = password;
     $('post_nick').value = username;
     $('post_pass').value = password;
-    
+
     if (paranoia == '1') $('paranoia').checked = "true";
-    if (singlemsg == '1') { 
+    if (singlemsg == '1') {
         $('singlemsg').checked = "true";
         singleMsg = true;
     }
-    
+
 }, false);
-    
+
 addEventListener("click", function(event)
 {
     var link = findParent(event.target, "a");
-   
+
     if (link)
     {
         function unselect() { link.removeAttribute("selected"); }
-        
+
         if (link.href && link.hash && link.hash != "#")
         {
             link.setAttribute("selected", "true");
@@ -213,32 +213,32 @@ addEventListener("click", function(event)
             setCookie("man_pass", $('password').value, 365);
             setCookie("man_paranoia", $('paranoia').checked ? $('paranoia').value : '0', 365);
             setCookie("man_singlemsg", $('singlemsg').checked ? $('singlemsg').value : '0', 365);
-            
+
             singleMsg = $('singlemsg').checked;
-            
+
             $('post_nick').value = $('username').value;
             $('post_pass').value = $('password').value;
-            
+
             cancelDialog(findParent(link, "form"));
         }
         else if (link.getAttribute("type") == "submit")
             submitForm(findParent(link, "form"));
-        else if (link.getAttribute("type") == "cancel") 
+        else if (link.getAttribute("type") == "cancel")
         {
             cancelDialog(findParent(link, "form"));
         }
-        else if (link.getAttribute("type") == "messagedetail") 
+        else if (link.getAttribute("type") == "messagedetail")
         {
             var containingLi = findParent(link, "li");
-            
+
             // if the message is being displayed, hide it.
-            if (containingLi.lastChild.localName != null && 
-                hasClass(containingLi.lastChild, "message")) 
+            if (containingLi.lastChild.localName != null &&
+                hasClass(containingLi.lastChild, "message"))
             {
                 containingLi.removeChild(containingLi.lastChild);
                 containingLi.removeAttribute("opened");
             }
-            else 
+            else
             {
                 if (singleMsg && lastOpenedMsg != null) {
                     try {
@@ -253,22 +253,27 @@ addEventListener("click", function(event)
                 var msgdiv = document.createElement("div");
                 msgdiv.setAttribute("class", "message");
                 msgdiv.setAttribute("loading", "true");
-                
-                containingLi.appendChild(msgdiv);
-                
+
+                var ul = containingLi.getElementsByTagName('ul');
+                if (ul.length > 0) {
+                    containingLi.insertBefore(msgdiv, ul[0]);
+                } else {
+                    containingLi.appendChild(msgdiv);
+                }
+
                 msgdiv.setAttribute("style", 'margin-left:-' + (containingLi.offsetLeft + 11) + 'px');
                 lastOpenedMsg = containingLi;
 
 				// scroll the message into view
 //                containingLi.scrollIntoView(true);
-                
+
                 // load the data
                 iui.showPageByHref(link.href, null, null, msgdiv, function() {
                         checkIfClosed(msgdiv);
                         msgdiv.removeAttribute("loading");
                         containingLi.scrollIntoView(true);
                     });
-                
+
             }
         }
         else if (link.target == "_replace")
@@ -283,8 +288,8 @@ addEventListener("click", function(event)
         }
         else
             return;
-        
-        event.preventDefault();        
+
+        event.preventDefault();
     }
 
 
@@ -296,14 +301,14 @@ addEventListener("click", function(event)
     if (div && hasClass(div, "toggle"))
     {
         div.setAttribute("toggled", div.getAttribute("toggled") != "true");
-        event.preventDefault();        
+        event.preventDefault();
     }
 }, true);
 
 function checkOrientAndLocation()
 {
     if (window.innerWidth != currentWidth)
-    {   
+    {
         currentWidth = window.innerWidth;
         var orient = currentWidth == 320 ? "profile" : "landscape";
         document.body.setAttribute("orient", orient);
@@ -326,7 +331,7 @@ function showDialog(page)
     currentDialog = page;
     page.setAttribute("selected", "true");
 //	page.setAttribute("style", "display:block");
-    
+
     if (hasClass(page, "dialog") && !page.target)
         showForm(page);
 
@@ -339,7 +344,7 @@ function showForm(form)
         event.preventDefault();
         submitForm(form);
     };
-    
+
 /*
     form.onclick = function(event)
     {
@@ -376,7 +381,7 @@ function updatePage(page, fromPage)
 
     if (page.localName.toLowerCase() == "form" && !page.target)
         showForm(page);
-        
+
     var backButton = $("backButton");
     if (backButton)
     {
@@ -392,11 +397,11 @@ function updatePage(page, fromPage)
         }
         else
             backButton.style.display = "none";
-    }    
+    }
 }
 
 function slidePages(fromPage, toPage, backwards)
-{        
+{
     var axis = (backwards ? fromPage : toPage).getAttribute("axis");
     if (axis == "y")
         (backwards ? fromPage : toPage).style.top = "100%";
@@ -406,7 +411,7 @@ function slidePages(fromPage, toPage, backwards)
     toPage.setAttribute("selected", "true");
     parent.scrollTo(0, 1);
     clearInterval(checkTimer);
-    
+
     var percent = 100;
     slide();
     var timer = setInterval(slide, slideInterval);
@@ -423,7 +428,7 @@ function slidePages(fromPage, toPage, backwards)
             checkTimer = setInterval(checkOrientAndLocation, 300);
             setTimeout(updatePage, 0, toPage, fromPage);
         }
-    
+
         if (axis == "y")
         {
             backwards
@@ -432,8 +437,8 @@ function slidePages(fromPage, toPage, backwards)
         }
         else
         {
-            fromPage.style.left = (backwards ? (100-percent) : (percent-100)) + "%"; 
-            toPage.style.left = (backwards ? -percent : percent) + "%"; 
+            fromPage.style.left = (backwards ? (100-percent) : (percent-100)) + "%";
+            toPage.style.left = (backwards ? -percent : percent) + "%";
         }
     }
 }
@@ -465,7 +470,7 @@ function encodeForm(form)
     encode(form.getElementsByTagName("input"));
     encode(form.getElementsByTagName("select"));
     encode(form.getElementsByTagName("textarea"));
-    return args;    
+    return args;
 }
 
 function findParent(node, localName)
@@ -516,12 +521,12 @@ function getCookie(c_name)
     {
         c_start=document.cookie.indexOf(c_name + "=");
         if (c_start!=-1)
-        { 
-            c_start=c_start + c_name.length+1; 
+        {
+            c_start=c_start + c_name.length+1;
             c_end=document.cookie.indexOf(";",c_start);
             if (c_end==-1) c_end=document.cookie.length;
             return unescape(document.cookie.substring(c_start,c_end));
-        } 
+        }
     }
     return "";
 }
@@ -552,10 +557,10 @@ function fillForm(caller,board,message) {
     var messageContainer = caller.parentNode.parentNode;
     var title = html_entity_decode(messageContainer.getElementsByTagName('div')[2].innerHTML);
     var msg = messageContainer.getElementsByTagName('div')[3].innerHTML;
-    
+
     if (title.substring(0,3) != 'Re:')
         title = "Re:" + title;
-    if (title.length > 56) 
+    if (title.length > 56)
         title = title.substring(0,56);
     document.getElementById('post_subject').value = title;
     // resetting the size of the textarea
@@ -569,7 +574,7 @@ function fillForm(caller,board,message) {
         var post_body = document.getElementById('post_body');
         post_body.value = msg.replace(/^\s+|\s+$/g,"") + "\n";
 		post_body.setAttribute('style', 'height:' + (post_body.scrollHeight + 30) + 'px');
-		
+
 		// position the cancel and post buttons
 //		document.getElementById('post_cancelbutton').setAttribute("style", "top:" + (post_body.scrollHeight + 170) + "px");
 //		document.getElementById('post_submitbutton').setAttribute("style", "top:" + (post_body.scrollHeight + 170) + "px");
@@ -585,7 +590,7 @@ function fillFormAfterError(board, message, subject, body) {
     var post_body = document.getElementById('post_body');
     post_body.value = body;
 	post_body.setAttribute('style', 'height:' + (post_body.scrollHeight + 30) + 'px');
-		
+
 	// position the cancel and post buttons
 //	document.getElementById('post_cancelbutton').setAttribute("style", "top:" + (post_body.scrollHeight + 170) + "px");
 //	document.getElementById('post_submitbutton').setAttribute("style", "top:" + (post_body.scrollHeight + 170) + "px");

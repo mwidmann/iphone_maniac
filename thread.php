@@ -4,7 +4,7 @@
 
     require "settings.php";
     require "weblib.php";
-    
+
     $id = $_REQUEST['id'];
     $thread = $_REQUEST['thread'];
     $closed = $_REQUEST['closed'];
@@ -15,22 +15,21 @@
             $title = "Smalltalk";
             break;
         case 2:
-            $title = "For Sale";
+            $title = "PC";
+            break;
+        case 3:
+            $title = "Konsole";
             break;
         case 4:
-            $title = "Tech'n'Cheats";
+            $title = "Archiv";
             break;
         case 6:
-            $title = "OT";
+            $title = "Online-Gaming";
             break;
         case 8:
-            $title = "Online Gaming";
+            $title = "Flohmarkt";
             break;
-        case 20:
-        case 25:
-            $title = "E3";
-            break;
-            
+
     }
 
 ?>
