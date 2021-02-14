@@ -110,7 +110,7 @@ span.highlight {
     list-style-position:outside;
     list-style-type:none;
     padding: 2px 0;
-    padding-left:20px;
+    padding-left:22px;
     background:url(closed.png) no-repeat scroll left 5px;
     /*line-height:25px;*/
     /*border:1px solid grey;*/
@@ -159,7 +159,7 @@ span.highlight {
     color: #000000;
 }
 .message a {
-    color: #ffffff;
+    color: #000000;
 }
 .message .author {
     border-bottom: 1px solid #315160;

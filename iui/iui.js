@@ -232,21 +232,27 @@ addEventListener("click", function(event)
             var containingLi = findParent(link, "li");
 
             // if the message is being displayed, hide it.
-            if (containingLi.lastChild.localName != null &&
-                hasClass(containingLi.lastChild, "message"))
-            {
-                containingLi.removeChild(containingLi.lastChild);
+            var openMessage = containingLi.querySelector('.message')
+            if (openMessage) {
+                containingLi.removeChild(openMessage)
                 containingLi.removeAttribute("opened");
+                lastOpenedMsg = null;
+                event.preventDefault();
+                return
             }
             else
             {
+                console.log({singleMsg, lastOpenedMsg, message: lastOpenedMsg ? lastOpenedMsg.querySelector('.message') : null})
                 if (singleMsg && lastOpenedMsg != null) {
                     try {
-                        lastOpenedMsg.removeChild(lastOpenedMsg.lastChild);
+                        lastOpenedMsg.removeChild(lastOpenedMsg.querySelector('.message'));
                     } catch (c) {
                         console.log(c);
                     }
                     lastOpenedMsg.removeAttribute("opened");
+                    lastOpenedMsg = null
+                    event.preventDefault();
+                    return
                 }
                 // create a div to contain the data
                 containingLi.setAttribute("opened", "true");

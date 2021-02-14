@@ -89,6 +89,8 @@
         $relevant_content = substr($relevant_content, stripos($relevant_content, "<ul>"));
         $relevant_content = substr($relevant_content, 0, strripos($relevant_content, "</ul>") + 5);
 
+        $relevant_content = str_replace("<li style=\"list-style-type:circle\">", "<li>", $relevant_content);
+
         $relevant_content = preg_replace("/\<img src=\"images\/arr_off.gif\" name=\"p(\d+)\"\>/i", "", $relevant_content);
         $relevant_content = str_replace("<font size=\"-1\">", "", $relevant_content);
         $relevant_content = str_replace("<font color=\"#7dacac\">von", "", $relevant_content);
@@ -98,21 +100,15 @@
         // replace the author, when admin
         $relevant_content = preg_replace("/\<font color=\"#FFC343\"\>\<b\>(.*)\<\/b\>\<\/font\>/i", "<div class=\"author_info\"><span class=\"author admin\">$1</span>", $relevant_content);
 
-        // var_dump( $relevant_content);
         $relevant_content = preg_replace("/\<font color=\"#7dacac\" size=\"-2\"\>- (.*)\<\/font\>/i", " - <span class=\"date\">$1</span></div>", $relevant_content);
 
-
         $relevant_content = preg_replace("/(\<\/b\>)?\<\/font\>/i", "", $relevant_content);
-        // $relevant_content = str_replace("</li>", "</div>\n</li>", $relevant_content);
 
-        $_COOKIE['man_user'] = 'Daiyama';
         if (isset($_COOKIE['man_user']) && $_COOKIE['man_user'] != '') {
             $pattern = "/\s*" . $_COOKIE['man_user'] . "\s*/i";
             $relevant_content = preg_replace($pattern, "<span class=\"currentuser\">".$_COOKIE['man_user']."</span> ", $relevant_content);
         }
         $relevant_content = preg_replace("/ href=\"pxmboard.php\?mode=message\&brdid=(\d+)\&msgid=(\d+)\" target=\"bottom\" onclick=\"ChangePic\('p(\d+)'\)\">/", " type=\"messagedetail\" href=\"message.php?id=$1&thread=$thread_id&message=$2\">", $relevant_content);
-        // $relevant_content = preg_replace("/ href=\"pxmboard.php\?mode=message\&amp;brdid=(\d+)\&amp;msgid=(\d+)\" target=\"bottom\" onclick=\"ChangePic\(\'p(\d+)\'\)\"/i", " type=\"messagedetail\" href=\"message.php?id=$board_id&thread=$thread_id&message=", $relevant_content);
-
 
         return utf8_encode($relevant_content);
     }
@@ -121,9 +117,8 @@
         $request = new HTTPRequest(MESSAGE_URL . $message_id . "&brdid=" . $board_id);
         $relevant_content = $request->DownloadToString();
 
-
-        if (preg_match('/<td id="norm" colspan="2">Thema: <b>(.*)<\/b><\/td>/m', $relevant_content, $matches)) {
-            $title = $matches[1];
+        if (preg_match('/<td id="norm"( colspan="2")?>Thema: <b>(.*)<\/b><\/td>/m', $relevant_content, $matches)) {
+            $title = $matches[2];
         }
         if (preg_match('/\&usrid=(\d+)/m', $relevant_content, $matches)) {
             $userid = $matches[1];
@@ -135,17 +130,6 @@
         $relevant_content = substr($relevant_content, stripos($relevant_content, "<font color=\"#000000\" face=\"Courier\">") + 37);
         $relevant_content = substr($relevant_content, 0, stripos($relevant_content, "</td>"));
         $relevant_content = substr($relevant_content, 0, strripos($relevant_content, "</font>"));
-
-        $matches = array();
-        preg_match_all( '/\[<a [^>]*>(.*?)<\/a>\]/im', $relevant_content, $matches );
-        if ( is_array( $matches ) ) {
-            for ( $i = 0; $i < count( $matches[0] ); $i++ ) {
-                if ( endsWith( strtolower( $matches[1][$i] ), "jpg" ) || endsWith( strtolower( $matches[1][$i] ), "png" ) || endsWith( strtolower( $matches[1][$i] ), "jpg" ) ) {
-                    $relevant_content = str_replace( $matches[0][$i], '<a href="' . $matches[1][$i] . '" target="_new"><img src="' . $matches[1][$i] . '" style="max-width:300px" border="0"/></a>', $relevant_content );
-                }
-            }
-        }
-
 
         $relevant_content = "<div class=\"entry\">$relevant_content</div>";
         $relevant_content = "<div class=\"title\">$title</div>" . $relevant_content;
@@ -193,7 +177,7 @@ function endsWith($haystack,$needle,$case=true)
 {
   $expectedPosition = strlen($haystack) - strlen($needle);
 
-  if($case)
+  if ($case)
       return strrpos($haystack, $needle, 0) === $expectedPosition;
 
   return strripos($haystack, $needle, 0) === $expectedPosition;
